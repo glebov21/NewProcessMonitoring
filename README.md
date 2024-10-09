@@ -1,5 +1,6 @@
 # NewProcessMonitoring
-Monitoring tool for finding new processes and running applications in system
+Monitoring tool for finding new processes and runned applications in system.
+This is help to watch for new application in windows.
 
 ![](Screenshot.png "Screenshot")
 
