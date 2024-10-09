@@ -10,6 +10,10 @@ Click `Trust All` if this list is OK. This processes will be added to ignore lis
 
 Click `Reset trust list` if you want to see agan full list
 
+## How it working
+
+When window is minimized or unfocused the get list of processes every 5 seconds. And check for new.
+
 ## Create setup
 1) Open `NSIS_SetupFile.nsi` in NSIS Compiler
 2) Click `Compile`
