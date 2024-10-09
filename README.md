@@ -12,7 +12,7 @@ Click `Reset trust list` if you want to see agan full list
 
 ## How it working
 
-When window is minimized or unfocused the get list of processes every 5 seconds. And check for new.
+When this app window minimized or unfocused they get list of processes every 5 seconds. And check for new.
 
 ## Create setup
 1) Open `NSIS_SetupFile.nsi` in NSIS Compiler
