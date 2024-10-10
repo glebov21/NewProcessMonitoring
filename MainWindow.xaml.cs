@@ -175,7 +175,7 @@ namespace NewProcessMonitoring
         private void tProcesses_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             if (e.PropertyType == typeof(System.DateTime))
-                (e.Column as DataGridTextColumn).Binding.StringFormat = "dd.MM.yyyy hh:mm";
+                (e.Column as DataGridTextColumn).Binding.StringFormat = "dd.MM.yyyy HH:mm";
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
