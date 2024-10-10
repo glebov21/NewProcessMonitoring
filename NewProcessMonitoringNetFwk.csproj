@@ -152,9 +152,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icon.jpg" />
-    <Resource Include="icon32t.ico" />
-    <Resource Include="icon48t.ico" />
+    <None Include="icon.jpg" />
+    <None Include="icon32t.ico" />
+    <None Include="icon48t.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
@@ -167,6 +167,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\FolderOpened.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\WebBrowser.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

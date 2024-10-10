@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Management;
 using System.Text;
@@ -31,20 +32,62 @@ namespace NewProcessMonitoring
             Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "NewPm", "processes.json"));
 
         private SemaphoreSlim _tableItemsRefreshSemaphore = new SemaphoreSlim(1);
+        private MinimizeToTray _minimizeToTray;
 
         ManagementObjectSearcher processSearcher = new ManagementObjectSearcher("SELECT ProcessId, Caption, ExecutablePath, CommandLine FROM Win32_Process");
 
         public MainWindow()
         {
             InitializeComponent();
+            _minimizeToTray = new MinimizeToTray(this);
 
-            MinimizeToTray.Enable(this);
+            var tbnOpenGoogle = new FrameworkElementFactory(typeof(Image));
+            var tbnOpenFolder = new FrameworkElementFactory(typeof(Image));
+
+            BitmapImage tbnOpenGoogleImage = new BitmapImage(new Uri("pack://application:,,,/Assets/WebBrowser.png"));
+            tbnOpenGoogle.SetValue(Image.SourceProperty, tbnOpenGoogleImage);
+
+            BitmapImage tbnOpenFolderImage = new BitmapImage(new Uri("pack://application:,,,/Assets/FolderOpened.png"));
+            tbnOpenFolder.SetValue(Image.SourceProperty, tbnOpenFolderImage);
+
+            tbnOpenGoogle.AddHandler(Image.MouseUpEvent, new MouseButtonEventHandler((s, e) =>
+            {
+                if (tProcesses.SelectedItem != null)
+                {
+                    var path = ((ProcessTableItem)tProcesses.SelectedItem).FullPath;
+                    var fileName = System.IO.Path.GetFileName(path);
+                    System.Diagnostics.Process.Start("https://www.google.com/search?q=What+is+" + fileName);
+                }
+            }));
+            tbnOpenFolder.AddHandler(Image.MouseUpEvent, new MouseButtonEventHandler((s, e) =>
+            {
+                if (tProcesses.SelectedItem != null)
+                {
+                    var filePath = ((ProcessTableItem)tProcesses.SelectedItem).FullPath;
+                    Process.Start("explorer.exe", "/select, \"" + filePath + "\"");
+                }
+            }));
+
+            this.tProcesses.Columns.Insert(0, new DataGridTemplateColumn()
+            {
+                Header = "",
+                CellTemplate = new DataTemplate() { VisualTree = tbnOpenGoogle }
+            }
+            );
+            this.tProcesses.Columns.Insert(0, new DataGridTemplateColumn()
+            {
+                Header = "",
+                CellTemplate = new DataTemplate() { VisualTree = tbnOpenFolder }
+            }
+            );
 
             tProcesses.ItemsSource = _tableItems;
 
-            _ = ProcessWatcherLoopAsync();
-        }
+            
 
+            _ = ProcessWatcherLoopAsync();
+            Application.Current.Exit += App_Exit;
+        }
 
         public async Task ProcessWatcherLoopAsync()
         {
@@ -68,8 +111,9 @@ namespace NewProcessMonitoring
 
             using (var results = processSearcher.Get())
             {
-                foreach (var mo in results.Cast<ManagementObject>())
+                foreach (var resultItem in results)
                 {
+                    var mo = (ManagementObject)resultItem;
                     var pTitle = (string)mo["Caption"];
                     var pPath = (string)mo["ExecutablePath"];
                     var pCommandLine = (string)mo["CommandLine"];
@@ -131,7 +175,7 @@ namespace NewProcessMonitoring
         private void tProcesses_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             if (e.PropertyType == typeof(System.DateTime))
-                (e.Column as DataGridTextColumn).Binding.StringFormat = "dd.MM.yyyy hh.mm";
+                (e.Column as DataGridTextColumn).Binding.StringFormat = "dd.MM.yyyy hh:mm";
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -144,6 +188,10 @@ namespace NewProcessMonitoring
         {
             WindowExtensions.HideMinimizeAndMaximizeButtons(this);
             this.WindowState = WindowState.Minimized;
+        }
+        private void App_Exit(object sender, ExitEventArgs e)
+        {
+            _minimizeToTray.Dispose();
         }
     }
 }

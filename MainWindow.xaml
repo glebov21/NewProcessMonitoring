@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Title="New Process Monitoring" Height="269" Width="561" Activated="wMain_Activated" Closing="Window_Closing" ResizeMode="CanResizeWithGrip" SourceInitialized="Window_SourceInitialized">
     <Grid Margin="0,0,0,0">
+        <DataGrid  HeadersVisibility="Column" x:Name="tProcesses" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,10,110,10" AutoGeneratingColumn="tProcesses_AutoGeneratingColumn" />
         <Button x:Name="bnApplyAllToTrusted" Content="Trust all" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="90" Click="bnApplyAllToTrusted_Click"/>
-        <DataGrid x:Name="tProcesses" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,10,110,10" AutoGeneratingColumn="tProcesses_AutoGeneratingColumn"/>
         <Button x:Name="bnClearTrustList" Content="Reset trust list" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="90" Click="bnClearTrustList_Click"/>
 
     </Grid>
