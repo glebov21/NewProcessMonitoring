@@ -15,6 +15,7 @@ Click `Reset trust list` if you want to see agan full list
 When this app window minimized or unfocused they get list of processes every 5 seconds. And check for new.
 
 ## Create setup
-1) Open `NSIS_SetupFile.nsi` in NSIS Compiler
-2) Click `Compile`
-3) Get NewPMSetup.exe from project folder
+1) Build `Release`.
+2) Open `NSIS_SetupFile.nsi` in NSIS Compiler.
+3) Click `Compile`.
+4) Get `NewPMSetup.exe` from project folder.
